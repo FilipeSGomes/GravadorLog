@@ -8,21 +8,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 //mport java.awt.print.Pageable;i
 import java.io.*;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @Service
 public class LogServiceImpl implements LogService {
-    private Reader arq = null;
     private final LogRepository repository;
     private Map<String, Long> linhas = new HashMap<>();
     @SneakyThrows
@@ -31,7 +28,7 @@ public class LogServiceImpl implements LogService {
         Reader test = new StringReader(new String(file.getBytes()));
         BufferedReader lerArq = new BufferedReader(test);
         int i = 1;
-        while (lerArq.ready() && i<13200) {
+        while (lerArq.ready() && i<100000) {
             i++;
             saveLine(removeDate(lerArq.readLine()));
         }
@@ -63,8 +60,8 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public List<LogDto> findAllLog() {
-        Pageable limit = PageRequest.of(0,10);
+    public List<LogDto> findAllLog(int size) {
+        Pageable limit = PageRequest.of(0,size);
         return mapper(repository.findAll(limit));
     }
 

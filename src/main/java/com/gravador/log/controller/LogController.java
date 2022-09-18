@@ -30,8 +30,8 @@ public class LogController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LogDto>> encontrarLog() {
-        return ResponseEntity.ok(service.findAllLog());
+    public ResponseEntity<List<LogDto>> encontrarLog(@RequestParam("size") int size) {
+        return ResponseEntity.ok(service.findAllLog(size));
     }
 
-}
+    }
